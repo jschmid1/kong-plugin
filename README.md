@@ -95,5 +95,5 @@ For example you want to route requests that have `X-Region:Abruzzo` and `X-City:
 Note: Defined filters in the configuration act as a AND gate.
 
 
-[badge-travis-url]: https://travis-ci.org/jschmid1/kong-plugin/branches
+[badge-travis-url]: https://travis-ci.com/github/jschmid1/kong-plugin
 [badge-travis-image]: https://travis-ci.com/jschmid1/kong-plugin.svg?branch=header-based-routing
