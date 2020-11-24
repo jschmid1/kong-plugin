@@ -17,31 +17,34 @@ describe(PLUGIN_NAME .. ": (schema)", function()
 
   it("accepts valid headers", function()
     local ok, err = validate({
-    {
-      upstream          = "italy_cluster",
-      header_match      = {"X-Region:Abruzzo"},
-    },
+      filter_rules = {
+        {
+          upstream          = "italy_cluster",
+          header_match      = {"X-Region:Abruzzo", "X-City:Pescara"},
+        },
+        {
+          upstream          = "europe_cluster",
+          header_match      = {},
+          default_target    = true
+        },
+      }
     })
     assert.is_nil(err)
     assert.is_truthy(ok)
   end)
 
 
-  -- it("does not accept identical request_header and response_header", function()
-  --   local ok, err = validate({
-  --       request_header = "they-are-the-same",
-  --       response_header = "they-are-the-same",
-  --     })
-
-  --   assert.is_same({
-  --     ["config"] = {
-  --       ["@entity"] = {
-  --         [1] = "values of these fields must be distinct: 'request_header', 'response_header'"
-  --       }
-  --     }
-  --   }, err)
-  --   assert.is_falsy(ok)
-  -- end)
+  it("does not accept invalid header formats", function()
+    local ok, err = validate({
+      filter_rules = {
+        {
+          upstream          = "italy_cluster",
+          header_match      = {"foo==", "foo,bar"},
+        }
+      }
+    })
+    assert.is_falsy(ok)
+  end)
 
 
 end)
