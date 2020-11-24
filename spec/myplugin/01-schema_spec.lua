@@ -44,6 +44,7 @@ describe(PLUGIN_NAME .. ": (schema)", function()
       }
     })
     assert.is_falsy(ok)
+    assert.is_truthy(err)
   end)
 
 
