@@ -54,7 +54,7 @@ return {
               elements = {
                 type = "record",
                 fields = {
-                -- TODO: make entitiy check that there is only one default_target
+                -- TODO: add entitiy check that there is only one default_target
                 --       but at least one
                 { default_target = { type = "boolean", default = false }, },
                 { upstream = { type = "string", required = true }, },
