@@ -89,3 +89,5 @@ The plugin allows to define filter rules that match configured Upstreams.
 
 
 For example you want to route requests that have `X-Region:Abruzzo` and `X-City:Pescara` in their headers to Upstream `italy_cluster`. All other requests, even if they also have `X-Region:Abruzzo` in their headers, go to the Upstream that you defined as `default_target`.
+
+Note: Defined filters in the configuration act as a AND gate.
