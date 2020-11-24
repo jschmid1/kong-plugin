@@ -21,7 +21,19 @@ for _, strategy in helpers.each_strategy() do
       bp.plugins:insert {
         name = PLUGIN_NAME,
         route = { id = route1.id },
-        config = {},
+        config = {
+          filter_rules = {
+            {
+              upstream          = "italy_cluster",
+              header_match      = {"X-Region:Abruzzo", "X-City:Pescara"},
+            },
+            {
+              upstream          = "europe_cluster",
+              header_match      = {},
+              default_target    = true
+            },
+          }
+        },
       }
 
       -- start kong
@@ -47,21 +59,22 @@ for _, strategy in helpers.each_strategy() do
       if client then client:close() end
     end)
 
-
-
     describe("request", function()
-      it("gets a 'hello-world' header", function()
+      it("verify if request got routed via the expected upstream", function()
         local r = client:get("/request", {
           headers = {
-            host = "test1.com"
+            ["Host"] = 'test1.com',
+            ["X-Region"] = "Abruzzo",
+            ["X-City"] = "Pescara",
           }
         })
         -- validate that the request succeeded, response status 200
         assert.response(r).has.status(200)
-        -- now check the request (as echoed by mockbin) to have the header
-        local header_value = assert.request(r).has.header("hello-world")
-        -- validate the value of that header
-        assert.equal("this is on a request", header_value)
+
+        -- TODO:
+        -- How to properly test if upstreams were hit?
+        -- 1. Setup upstreams with mock targets
+        -- 2. Verify if target got a request based on the headers?
       end)
     end)
 
